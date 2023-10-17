@@ -18,7 +18,9 @@ public class Client extends GermanTranslator implements Translator {
 			//
 			// Strenge Implementierung gegen das Interface Translator gewuenscht!
 		 	Client client = new Client();
-	 		return client.translateNumber(num);
+	 		String value = client.translateNumber(num);
+			System.out.println(value);
+	 		return value;
 
 		 }
 
