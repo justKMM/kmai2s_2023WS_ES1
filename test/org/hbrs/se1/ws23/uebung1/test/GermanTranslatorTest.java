@@ -13,31 +13,31 @@ class GermanTranslatorTest {
     void init() {
         c =  new Client();
     }
-    @Test
+    @Test   //Test Case for number 0
     void zeroTest() {
         number = 0;
         String value = c.display(number);
-        assertEquals(value, "Übersetzung der Zahl 0 nicht möglich (v1.9)");
+        assertEquals(value, "Übersetzung der Zahl " + number + " nicht möglich (v1.9)");
     }
 
-    @Test
+    @Test   //Test Case for numbers > 10 (chosen number: 11)
     void biggerThan10Test() {
         number = 11;
         String value = c.display(number);
-        assertEquals(value, "Übersetzung der Zahl 11 nicht möglich (v1.9)");
+        assertEquals(value, "Übersetzung der Zahl " + number + " nicht möglich (v1.9)");
     }
 
-    @Test
+    @Test   //Test Case for positive numbers <= 10 (chosen number: 3)
     void positiveTest() {
         number = 3;
         String value = c.display(number);
         assertEquals(value, "drei");
     }
 
-    @Test
+    @Test   //Test Case for negative numbers (chosen number: -5)
     void negativeTest() {
         number = -5;
         String value = c.display(number);
-        assertEquals(value, "Übersetzung der Zahl -5 nicht möglich (v1.9)");
+        assertEquals(value, "Übersetzung der Zahl " + number + " nicht möglich (v1.9)");
     }
 }
