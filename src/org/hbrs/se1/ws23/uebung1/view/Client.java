@@ -11,7 +11,7 @@ public class Client implements Translator {
 		 *
 		 */
 		Translator germanTranslator = TranslatorFactory.createGermanTranslator();
-		public String display(int num) {
+		public void display(int num) {
 			// In dieser Methode soll die Methode translateNumber
 			// mit dem übergegebenen Wert der Variable aNumber
 			// aufgerufen werden.
@@ -20,7 +20,6 @@ public class Client implements Translator {
 		 	Client client = new Client();
 	 		String value = client.translateNumber(num);
 			System.out.println(value);
-	 		return value;
 
 		 }
 
