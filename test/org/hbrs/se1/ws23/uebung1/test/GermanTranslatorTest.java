@@ -17,14 +17,14 @@ class GermanTranslatorTest {
     void zeroTest() {
         number = 0;
         String value = c.translateNumber(number);
-        assertEquals(value, "Übersetzung der Zahl " + number + " nicht möglich (v1.9)");
+        assertEquals(value, "Übersetzung der Zahl " + number + " nicht möglich (1.0)");
     }
 
     @Test   //Test Case for numbers > 10 (chosen number: 11)
     void biggerThan10Test() {
         number = 11;
         String value = c.translateNumber(number);
-        assertEquals(value, "Übersetzung der Zahl " + number + " nicht möglich (v1.9)");
+        assertEquals(value, "Übersetzung der Zahl " + number + " nicht möglich (1.0)");
     }
 
     @Test   //Test Case for positive numbers <= 10 (chosen number: 3)
@@ -38,6 +38,6 @@ class GermanTranslatorTest {
     void negativeTest() {
         number = -5;
         String value = c.translateNumber(number);
-        assertEquals(value, "Übersetzung der Zahl " + number + " nicht möglich (v1.9)");
+        assertEquals(value, "Übersetzung der Zahl " + number + " nicht möglich (1.0)");
     }
 }
