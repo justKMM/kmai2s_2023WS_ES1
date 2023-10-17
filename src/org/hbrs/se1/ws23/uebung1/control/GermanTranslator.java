@@ -3,21 +3,25 @@ package org.hbrs.se1.ws23.uebung1.control;
 public class GermanTranslator implements Translator {
 
 	public String date = "Okt/2023"; // Default-Wert
+	public String version = "v1.9";
 
 	/**
 	 * Methode zur Übersetzung einer Zahl in eine String-Repraesentation
 	 */
 	public String translateNumber( int number ) {
-		// [ihr Source Code aus Übung 1-2]
-
-		return "null";
+        String[] zahlen = {"eins", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun", "zehn"};
+		try {
+			return zahlen[number - 1];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return "Übersetzung der Zahl " + number + " nicht möglich (" + this.version + ")";
+		}
 	}
 
 	/**
 	 * Objektmethode der Klasse GermanTranslator zur Ausgabe einer Info.
 	 */
 	public void printInfo(){
-		System.out.println( "GermanTranslator v1.9, erzeugt am " + this.date );
+		System.out.println( "GermanTranslator " + this.version + ", erzeugt am " + this.date );
 	}
 
 	/**

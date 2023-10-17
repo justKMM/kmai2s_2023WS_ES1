@@ -11,22 +11,14 @@ public class Client extends GermanTranslator implements Translator {
 		 * (auch bezeichnet als CLI, Terminal)
 		 *
 		 */
-		 void display( int num ) {
+		public String display(int num) {
 			// In dieser Methode soll die Methode translateNumber
 			// mit dem übergegebenen Wert der Variable aNumber
 			// aufgerufen werden.
 			//
 			// Strenge Implementierung gegen das Interface Translator gewuenscht!
-		 	String ergebnis;
-			GermanTranslator germanTranslator = (GermanTranslator) TranslatorFactory.createGermanTranslator();
-			try {
-				ergebnis = germanTranslator.translateNumber(num);
-			} catch (ArrayIndexOutOfBoundsException e) {
-				ergebnis = "Übersetzung der Zahl " + num + " nicht möglich (" + germanTranslator.version + ")";
-			}
-
-			System.out.println("Das Ergebnis der Berechnung: " +
-					ergebnis );
+		 	Client client = new Client();
+	 		return client.translateNumber(num);
 
 		 }
 
