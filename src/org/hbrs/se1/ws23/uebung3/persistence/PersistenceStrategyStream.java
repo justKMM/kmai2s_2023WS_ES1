@@ -1,5 +1,6 @@
 package org.hbrs.se1.ws23.uebung3.persistence;
 
+import java.io.*;
 import java.util.List;
 
 public class PersistenceStrategyStream<E> implements PersistenceStrategy<E> {
@@ -20,7 +21,6 @@ public class PersistenceStrategyStream<E> implements PersistenceStrategy<E> {
      * and save.
      */
     public void openConnection() throws PersistenceException {
-
     }
 
     @Override
@@ -36,7 +36,12 @@ public class PersistenceStrategyStream<E> implements PersistenceStrategy<E> {
      * Method for saving a list of Member-objects to a disk (HDD)
      */
     public void save(List<E> member) throws PersistenceException  {
-
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(location));
+            oos.writeObject(member);
+        } catch (IOException e) {
+            throw new PersistenceException(PersistenceException.ExceptionType.ImplementationNotAvailable, e.getMessage());
+        }
     }
 
     @Override
@@ -48,7 +53,13 @@ public class PersistenceStrategyStream<E> implements PersistenceStrategy<E> {
     public List<E> load() throws PersistenceException  {
         // Some Coding hints ;-)
 
-        // ObjectInputStream ois = null;
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(location));
+            Object o = ois.readObject();
+            ois.close();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new PersistenceException(PersistenceException.ExceptionType.ImplementationNotAvailable, e.getMessage());
+        }
         // FileInputStream fis = null;
         // List<...> newListe =  null;
         //

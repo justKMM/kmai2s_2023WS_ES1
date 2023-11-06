@@ -12,13 +12,17 @@ import org.junit.jupiter.api.function.Executable;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ContainerTest {
-    Container container;
+    Container<Member> container;
     Member member;
     @BeforeEach
-    void init() throws ContainerException {
-        container = new Container();
+    void init()  {
+        container = Container.getInstance();
         member = new ConcreteMember(38);
-        container.addMember(member);
+        try {
+            container.addMember(member);
+        } catch (ContainerException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

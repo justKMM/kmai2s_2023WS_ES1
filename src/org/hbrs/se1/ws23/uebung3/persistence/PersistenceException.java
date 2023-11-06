@@ -4,6 +4,10 @@ public class PersistenceException extends Exception {
 
     private ExceptionType exceptionType;
 
+    public PersistenceException(String message) {
+    }
+
+
     public ExceptionType getExceptionTypeType() {
         return this.exceptionType;
     }
