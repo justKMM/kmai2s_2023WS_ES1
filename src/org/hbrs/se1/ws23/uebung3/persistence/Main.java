@@ -6,7 +6,7 @@ import org.hbrs.se1.ws23.uebung2.ContainerException;
 import org.hbrs.se1.ws23.uebung2.Member;
 import org.hbrs.se1.ws23.uebung3.persistence.Client;
 
-public class Main<T extends Member> {
+public class Main {
 
     // Facade Pattern
     public static void main(String[] args) {
@@ -25,6 +25,6 @@ public class Main<T extends Member> {
         memberView.dump(container.getCurrentList());
     }
 
-    // Implementing the Persistence Strategy - Strategy Pattern
+    // Implementing the Persistence Strategy -> Strategy Pattern
 
 }

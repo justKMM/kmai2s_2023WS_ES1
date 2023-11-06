@@ -44,18 +44,18 @@ public class Container<T extends Member> {
     }
 
     void setPersistenceStrategy(PersistenceStrategy persistenceStrategy) {
-        this.persistenceStrategy=persistenceStrategy;
+        this.persistenceStrategy = persistenceStrategy;
     }
 
     public int size() {
         return members.size();
     }
 
-    void store() throws PersistenceException {
+    public void store() throws PersistenceException {
         persistenceStrategy.save(members);
     }
 
-    void load() throws PersistenceException {
+    public void load() throws PersistenceException {
         members = persistenceStrategy.load();
     }
 }
