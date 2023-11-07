@@ -5,6 +5,7 @@ public class PersistenceException extends Exception {
     private ExceptionType exceptionType;
 
     public PersistenceException(String message) {
+        super(message);
     }
 
 
@@ -16,6 +17,7 @@ public class PersistenceException extends Exception {
         super(message);
         this.exceptionType = exceptionType;
     }
+
 
     /**
      * ExceptionTypes for declaring the type of an exception.

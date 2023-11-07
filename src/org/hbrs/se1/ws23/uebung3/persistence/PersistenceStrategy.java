@@ -16,8 +16,12 @@ import java.util.List;
  * @param <E>
  */
 public interface PersistenceStrategy<E> {
+    // Backdoor method used only for testing purposes, if the location should be changed in a Unit-Test
+    // Example: Location is a directory (Streams do not like directories, so try this out ;-)!
+
     public void openConnection() throws PersistenceException;
     public void closeConnection() throws PersistenceException;
     public void save(List<E> member) throws PersistenceException;
     public List<E> load() throws PersistenceException;
+
 }

@@ -26,6 +26,10 @@ public class Container<T extends Member> {
         return members;
     }
 
+    public void setMembers(List<T> members) {
+        this.members = members;
+    }
+
     public void addMember(T member) throws ContainerException {
         for (Member m : members) if (m.getID() == member.getID()) throw new ContainerException("Das Member Object mit der ID"
                                                                                                         + member.getID()
@@ -43,7 +47,7 @@ public class Container<T extends Member> {
         return "Das Member mit der ID" + ID + "ist nicht vorhanden!";
     }
 
-    void setPersistenceStrategy(PersistenceStrategy persistenceStrategy) {
+    public void setPersistenceStrategy(PersistenceStrategy persistenceStrategy) {
         this.persistenceStrategy = persistenceStrategy;
     }
 
@@ -52,10 +56,12 @@ public class Container<T extends Member> {
     }
 
     public void store() throws PersistenceException {
+        if (persistenceStrategy == null) throw new PersistenceException(PersistenceException.ExceptionType.NoStrategyIsSet, "PersistenceStrategy empty!");
         persistenceStrategy.save(members);
     }
 
     public void load() throws PersistenceException {
+        if (persistenceStrategy == null) throw new PersistenceException(PersistenceException.ExceptionType.NoStrategyIsSet, "PersistenceStrategy empty!");
         members = persistenceStrategy.load();
     }
 }

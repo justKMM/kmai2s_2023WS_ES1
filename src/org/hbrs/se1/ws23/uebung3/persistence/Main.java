@@ -23,6 +23,12 @@ public class Main {
         // Create a MemberView instance and use it to display the current list from the Container
         MemberView memberView = new MemberView();
         memberView.dump(container.getCurrentList());
+
+        try {
+            container.store();
+        } catch (PersistenceException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Implementing the Persistence Strategy -> Strategy Pattern
