@@ -15,10 +15,12 @@ public class Container<T extends Member> {
     private Container() {
     }
 
-    public static Container getInstance() {
+    public static synchronized Container getInstance() {
         if(container == null){
             container = new Container();
         }
+
+        // Alternativ: Syncronized Blocks verwenden
         return container;
     }
 

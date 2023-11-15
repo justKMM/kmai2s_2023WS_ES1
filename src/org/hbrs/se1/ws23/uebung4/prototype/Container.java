@@ -107,7 +107,7 @@ public class Container {
 			// Auswahl der bisher implementierten Befehle:
 			if ( strings[0].equals("enter") ) {
 				// Daten einlesen ...
-				// this.addUserStory( new UserStory( data ) ) um das Objekt in die Liste einzufügen.
+				this.addUserStory( new UserStory() ); // um das Objekt in die Liste einzufügen.
 			}
 								
 			if (  strings[0].equals("store")  ) {

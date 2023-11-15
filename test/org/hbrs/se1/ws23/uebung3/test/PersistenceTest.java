@@ -13,17 +13,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PersistenceTest {
-    Container container;
+    Member member;
+    Container<Member> container;
     PersistenceException noStrategyIsSet = new PersistenceException(PersistenceException.ExceptionType.NoStrategyIsSet, "No Persistence Strategy");
     PersistenceException implementationNotAvailable = new PersistenceException(PersistenceException.ExceptionType.ImplementationNotAvailable, "Persistence Strategy not implemented correctly");
     @BeforeEach
     void init() {
         this.container = Container.getInstance();
-        if(!container.getCurrentList().isEmpty()) container.setMembers(new ArrayList<>());
+        if(!container.getCurrentList().isEmpty()) {
+            container.setPersistenceStrategy(null);
+            container.setMembers(new ArrayList<>());
+        }
         try {
-            container.addMember(new ConcreteMember(38));
+            member = new ConcreteMember(38);
+            container.addMember(member);
         } catch (ContainerException e) {
             throw new RuntimeException(e);
         }
@@ -67,6 +73,6 @@ public class PersistenceTest {
         } catch (PersistenceException e) {
             throw new RuntimeException(e);
         }
-        Assertions.assertEquals(new ConcreteMember(38), container.getCurrentList());
+        Assertions.assertEquals(member.getID(), container.getCurrentList().get(0).getID());
     }
 }
