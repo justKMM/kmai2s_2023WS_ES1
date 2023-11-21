@@ -32,6 +32,16 @@ import java.util.stream.Collectors;
  */
 
 public class Container {
+
+	class UserStoryComparator implements Comparator<UserStory> {
+
+		@Override
+		public int compare(UserStory o1, UserStory o2) {
+			if ( o1.getPrio() == o2.getPrio() )return 0;
+			if( o1.getPrio() < o2.getPrio() ) return 1;
+			return -1;
+		}
+	}
 	 
 	// Interne ArrayList zur Abspeicherung der Objekte vom Type UserStory
 	private List<UserStory> liste = null;
@@ -67,10 +77,15 @@ public class Container {
 	 * Start-Methoden zum Starten des Programms 
 	 * (hier koennen ggf. weitere Initialisierungsarbeiten gemacht werden spaeter)
 	 */
-	public static void main (String[] args) throws Exception {
+	public static void main (String[] args) throws ContainerException {
 		// ToDo: Bewertung Exception-Handling (F3, F7)
-		Container con = Container.getInstance();
-		con.startEingabe(); 
+		try {
+			Container con = Container.getInstance();
+			con.startEingabe();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ContainerException("Container Exception: Please checkie check");
+		}
 	}
 	
 	/*
@@ -78,46 +93,74 @@ public class Container {
 	 * Alle Exceptions werden an den aufrufenden Context (hier: main) weitergegeben (throws)
 	 * Das entlastet den Entwickler zur Entwicklungszeit und den Endanwender zur Laufzeit
 	 */
-	public void startEingabe() throws ContainerException, Exception {
+	public void startEingabe() throws Exception {
 		String strInput = null;
 		
 		// Initialisierung des Eingabe-View
 		// ToDo: Funktionsweise des Scanners erklären (F3)
 		Scanner scanner = new Scanner( System.in );
+		// Ausgabe eines Texts zur Begruessung
+		System.out.println("UserStory-Tool V1.0 by Julius P. (dedicated to all my friends)");
 
-		while ( true ) {
-			// Ausgabe eines Texts zur Begruessung
-			System.out.println("UserStory-Tool V1.0 by Julius P. (dedicated to all my friends)");
-
-			System.out.print( "> "  );
+		boolean bool = true;
+		while ( bool ) {
+			System.out.print( "> befehl "  );
 
 			strInput = scanner.nextLine();
 		
 			// Extrahiert ein Array aus der Eingabe
 			String[] strings = strInput.split(" ");
+			switch (strInput) {
+				// 	Falls 'help' eingegeben wurde, werden alle Befehle ausgedruckt
+				case  ( "help" ) :
+					System.out.println("Available commands: \n" +
+							"help - Show available commands \n" +
+							"enter - Add an User Story \n" +
+							"dump - Print out saved User Stories \n" +
+							"exit - End the programm");
+					break;
 
-			// 	Falls 'help' eingegeben wurde, werden alle Befehle ausgedruckt
-			if ( strings[0].equals("help") ) {
-				System.out.println("Folgende Befehle stehen zur Verfuegung: help, dump....");
+				// Auswahl der bisher implementierten Befehle:
+				case  ( "dump" ) :
+					startAusgabe();
+					break;
+
+				// Auswahl der bisher implementierten Befehle:
+				case  ( "enter" ) :
+					System.out.println("Please type in UserStory datas (int id, String titel, int mehrwert, int strafe, "
+							+ "int aufwand, int risk):");
+					Scanner sc = new Scanner(scanner.nextLine());
+					int id = sc.nextInt();
+					String titel = sc.next();
+					int mehrwert = sc.nextInt();
+					int strafe = sc.nextInt();
+					int aufwand = sc.nextInt();
+					int risk = sc.nextInt();
+					sc.close();
+					float prio = (float) (mehrwert + strafe) / (aufwand + risk);
+
+					if (prio > 0 && prio < 20){
+						this.addUserStory(new UserStory(id, titel, mehrwert, strafe, aufwand, risk, prio)); // um das Objekt in die Liste einzufügen.
+					}
+					break;
+
+				// Die Objekte speichern:
+				case  ( "store" ) :
+					this.store();
+					break;
+
+				case ( "exit" ) :
+					scanner.close();
+					bool = false;
+					scanner.close();
+					break;
+
+				default:
+					System.out.println("False command. For list of available commands, type \"help\" ");
+
 			}
-			// Auswahl der bisher implementierten Befehle:
-			if ( strings[0].equals("dump") ) {
-				startAusgabe();
-			}
-			// Auswahl der bisher implementierten Befehle:
-			if ( strings[0].equals("enter") ) {
-				// Daten einlesen ...
-				this.addUserStory( new UserStory() ); // um das Objekt in die Liste einzufügen.
-			}
-								
-			if (  strings[0].equals("store")  ) {
-				// Beispiel-Code
-				UserStory userStory = new UserStory();
-				userStory.setId(22);
-				this.addUserStory( userStory );
-				this.store();
-			}
-		} // Ende der Schleife
+
+		}
 	}
 
 	/**
@@ -130,17 +173,30 @@ public class Container {
 
 		// [Sortierung ausgelassen]
 		// Todo: Implementierung Sortierung (F4)
+		this.sort();
+
+
+		System.out.printf("--------------------------------%n");
+		System.out.printf(" Vorhandene UserStories         %n");
+
+		System.out.printf("--------------------------------%n");
+		System.out.printf("| %s | %-10s | %s | %s | %s | %s | %s |%n",
+				"ID", "TITEL", "MEHRWERT", "STRAFE", "AUFWAND", "RISK", "PRIO");
+		System.out.printf("--------------------------------%n");
+
 
 		// Klassische Ausgabe ueber eine For-Each-Schleife
 		for (UserStory story : liste) {
-			System.out.println(story.toString());
+			System.out.printf("| %d | %-10s | %d | %d | %d | %d | %.2f |%n ",
+					story.getId(), story.getTitel(), story.getMehrwert(), story.getStrafe(), story.getAufwand(), story.getRisk(), story.getPrio());
 		}
+		System.out.printf("--------------------------------%n");
 
 		// [Variante mit forEach-Methode / Streams (--> Kapitel 9, Lösung Übung Nr. 2)?
 		//  Gerne auch mit Beachtung der neuen US1
 		// (Filterung Projekt = "ein Wert (z.B. Coll@HBRS)" und Risiko >=5
 		// Todo: Implementierung Filterung mit Lambda (F5)
-
+		this.filter();
 	}
 
 	/*
@@ -249,11 +305,23 @@ public class Container {
 	 * @return
 	 */
 	private UserStory getUserStory(int id) {
-		for ( UserStory userStory : liste) {
+		for ( UserStory userStory : liste ) {
 			if (id == userStory.getId() ){
 				return userStory;
 			}
 		}
 		return null;
+	}
+
+	public void sort() {
+		Comparator<UserStory> userStoryComparator = new UserStoryComparator();
+		this.liste.sort(userStoryComparator);
+	}
+
+	public void filter() {
+		List<UserStory> filteredList = this.liste.stream()
+				.filter(userStory -> userStory.getPrio() > 0)
+				.filter(userStory -> userStory.getPrio() < 20)
+				.collect(Collectors.toList());
 	}
 }
