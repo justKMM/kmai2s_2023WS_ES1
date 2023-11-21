@@ -27,8 +27,8 @@ public class Client {
      * Das entlastet den Entwickler zur Entwicklungszeit und den Endanwender zur Laufzeit
      */
     public void startEingabe(Container container) throws Exception {
-        String strInput = null;
         List<UserStory> stories;
+        String strInput = null;
         // Initialisierung des Eingabe-View
         // ToDo: Funktionsweise des Scanners erklären (F3)
         Scanner scanner = new Scanner( System.in );
@@ -38,6 +38,7 @@ public class Client {
 
         boolean appRunning = true;
         while ( appRunning ) {
+
             System.out.print( "> befehl "  );
 
             strInput = scanner.nextLine();
@@ -66,12 +67,13 @@ public class Client {
                     try {
                         if (strings.length == 1) stories = container.getCurrentList();
                         else if (strings[1].equals("project")) {
+                            System.out.println("dumping project " + strings[2]);
                             String projectName = strings[2];
                             for (UserStory story : container.getCurrentList()) {
                                 if (story.getProject().equals(projectName)) stories.add(story);
                             }
                         }
-                        view.startAusgabe(container.getCurrentList());
+                        view.startAusgabe(stories);
                     } catch (IndexOutOfBoundsException e) {
                         System.out.println("Project name has to be specified");
                     }
@@ -93,7 +95,7 @@ public class Client {
                                 if (story.getId() == id) stories.add(story);
                             }
                         }
-                        view.startAusgabe(container.getCurrentList());
+                        view.startAusgabe(stories);
                     } catch (IndexOutOfBoundsException e) {
                         System.out.println("Project name has to be specified");
                     }

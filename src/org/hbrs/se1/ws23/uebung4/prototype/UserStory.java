@@ -16,7 +16,7 @@ public class UserStory implements Serializable, Comparable<UserStory> {
         private int risk = 0;
         private int strafe = 0;
         private double prio = 0.0;
-        private String project;
+        private String project = "";
 
         public String getProject() {
             return project;
