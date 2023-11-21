@@ -28,7 +28,7 @@ public class Client {
      */
     public void startEingabe(Container container) throws Exception {
         String strInput = null;
-
+        List<UserStory> stories;
         // Initialisierung des Eingabe-View
         // ToDo: Funktionsweise des Scanners erklären (F3)
         Scanner scanner = new Scanner( System.in );
@@ -41,10 +41,14 @@ public class Client {
             System.out.print( "> befehl "  );
 
             strInput = scanner.nextLine();
-
             // Extrahiert ein Array aus der Eingabe
             String[] strings = strInput.split(" ");
-            switch (strInput) {
+            if(strings.length < 1) {
+                System.out.println("Command cannot be empty");
+                System.out.print( "> befehl "  );
+                strInput = scanner.nextLine();
+            }
+            switch (strings[0]) {
                 // 	Falls 'help' eingegeben wurde, werden alle Befehle ausgedruckt
                 case  ( "help" ) :
                     System.out.println("Available commands: \n" +
@@ -52,24 +56,48 @@ public class Client {
                             "enter - Add an User Story \n" +
                             "dump - Print out saved User Stories \n" +
                             "dump project [project name] - Print out User Stories with the corresponding Project \n" +
-                            "search - Search User Stories with the corresponding Project \n" +
+                            "search [criteria name] [criteria] - Search User Stories with the corresponding Project / ID \n" +
                             "exit - End the programm");
                     break;
 
                 // Auswahl der bisher implementierten Befehle:
                 case  ( "dump" ) :
-                    view.startAusgabe(container.getCurrentList());
-                    break;
-                case ( "dump project" ):
-                    List<UserStory> stories = new ArrayList<>();
-                    if(scanner.hasNext()) { // if 1st extra parameter is "project"
-                        // then check if there's an extra extra parameter
-                        String projectName = scanner.next();
-                        for (UserStory story : container.getCurrentList()) {
-                            if(story.getProject().equals(projectName)) stories.add(story);
+                    stories = new ArrayList<>();
+                    try {
+                        if (strings.length == 1) stories = container.getCurrentList();
+                        else if (strings[1].equals("project")) {
+                            String projectName = strings[2];
+                            for (UserStory story : container.getCurrentList()) {
+                                if (story.getProject().equals(projectName)) stories.add(story);
+                            }
                         }
+                        view.startAusgabe(container.getCurrentList());
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("Project name has to be specified");
                     }
-                    view.startAusgabe(stories);
+
+                    break;
+
+                case ( "search" ) :
+                    stories = new ArrayList<>();
+                    try {
+                        if (strings.length == 1) stories = container.getCurrentList();
+                        else if (strings[1].equals("project")) {
+                            String projectName = strings[2];
+                            for (UserStory story : container.getCurrentList()) {
+                                if (story.getProject().equals(projectName)) stories.add(story);
+                            }
+                        } else if (strings[1].equals("id")) {
+                            int id = Integer.parseInt(strings[2]);
+                            for (UserStory story : container.getCurrentList()) {
+                                if (story.getId() == id) stories.add(story);
+                            }
+                        }
+                        view.startAusgabe(container.getCurrentList());
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("Project name has to be specified");
+                    }
+
                     break;
 
                 // Auswahl der bisher implementierten Befehle:
