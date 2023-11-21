@@ -1,5 +1,6 @@
 package org.hbrs.se1.ws23.uebung4.prototype;
 
+import org.hbrs.se1.ws23.uebung3.persistence.PersistenceException;
 import org.hbrs.se1.ws23.uebung3.persistence.PersistenceStrategy;
 
 import java.io.*;
@@ -62,7 +63,7 @@ public class Container {
 	private static Container instance;
 	
 	// URL der Datei, in der die Objekte gespeichert werden 
-	final static String LOCATION = "allStories.ser";
+
 
 	/**
 	 * Liefert ein Singleton zurück.
@@ -79,6 +80,7 @@ public class Container {
 	 */
 	private Container(){
 		liste = new ArrayList<UserStory>();
+		persistenceStrategy = new PersistenceStrategyStoryStream();
 	}
 	
 	/**
@@ -87,60 +89,19 @@ public class Container {
 	 */
 
 
-
-
 	/*
 	 * Methode zum Speichern der Liste. Es wird die komplette Liste
 	 * inklusive ihrer gespeicherten UserStory-Objekte gespeichert.
 	 * 
 	 */
-	void store() throws ContainerException {
-		ObjectOutputStream oos = null;
-		FileOutputStream fos = null;
-		try {
-			fos = new FileOutputStream( Container.LOCATION );
-			oos = new ObjectOutputStream(fos);
-			
-			oos.writeObject( this.liste );
-			System.out.println( this.size() + " UserStory wurden erfolgreich gespeichert!");
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		  //  Delegation in den aufrufendem Context
-		  // (Anwendung Pattern "Chain Of Responsibility)
-		  throw new ContainerException("Fehler beim Abspeichern");
-		}
+	void store() throws PersistenceException {
+		if (persistenceStrategy == null) throw new PersistenceException(PersistenceException.ExceptionType.NoStrategyIsSet, "PersistenceStrategy empty!");
+		persistenceStrategy.save(liste);
 	}
 
-	/*
-	 * Methode zum Laden der Liste. Es wird die komplette Liste
-	 * inklusive ihrer gespeicherten UserStory-Objekte geladen.
-	 * 
-	 */
-	 void load() {
-		ObjectInputStream ois = null;
-		FileInputStream fis = null;
-		try {
-		  fis = new FileInputStream( Container.LOCATION );
-		  ois = new ObjectInputStream(fis);
-		  
-		  // Auslesen der Liste
-		  Object obj = ois.readObject();
-		  if (obj instanceof List<?>) {
-			  this.liste = (List) obj;
-		  }
-		  System.out.println("Es wurden " + this.size() + " UserStory erfolgreich reingeladen!");
-		}
-		catch (IOException e) {
-			System.out.println("LOG (für Admin): Datei konnte nicht gefunden werden!");
-		}
-		catch (ClassNotFoundException e) {
-			System.out.println("LOG (für Admin): Liste konnte nicht extrahiert werden (ClassNotFound)!");
-		}
-		finally {
-		  if (ois != null) try { ois.close(); } catch (IOException e) {}
-		  if (fis != null) try { fis.close(); } catch (IOException e) {}
-		}
+	public void load() throws PersistenceException {
+		if (persistenceStrategy == null) throw new PersistenceException(PersistenceException.ExceptionType.NoStrategyIsSet, "PersistenceStrategy empty!");
+		liste = persistenceStrategy.load();
 	}
 
 	/**

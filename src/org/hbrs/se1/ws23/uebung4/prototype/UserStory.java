@@ -30,7 +30,7 @@ public class UserStory implements Serializable, Comparable<UserStory> {
 
 
         public UserStory(int id, String titel, int mehrwert, int strafe,
-                         int aufwand, int risk, double prio) {
+                         int aufwand, int risk, double prio, String project) {
             this.id = id;
             this.titel = titel;
             this.mehrwert = mehrwert;
@@ -38,6 +38,7 @@ public class UserStory implements Serializable, Comparable<UserStory> {
             this.aufwand = aufwand;
             this.risk = risk;
             this.prio = prio;
+            this.project = project;
         }
 
         public UserStory() {
