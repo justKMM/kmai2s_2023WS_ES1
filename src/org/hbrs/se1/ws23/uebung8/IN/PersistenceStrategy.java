@@ -1,0 +1,27 @@
+package org.hbrs.se1.ws23.uebung8.IN;
+
+import java.util.List;
+
+/**
+ * Interface for defining basic methods for a persistence mechanism
+ * Each concrete algorithm (i.e. strategy) must implement this method
+ * This interface corresponds to the abstract strategy w.r.t. to the
+ * Strategy Design Pattern (GoF).
+ *
+ * The following protocol applies:
+ * 1. openConnection
+ * 2. { load | save }  (many times)
+ * 3. closeConnection
+ *
+ * @param <E>
+ */
+public interface PersistenceStrategy<E> {
+    // Backdoor method used only for testing purposes, if the location should be changed in a Unit-Test
+    // Example: Location is a directory (Streams do not like directories, so try this out ;-)!
+
+    public void openConnection() throws PersistenceException;
+    public void closeConnection() throws PersistenceException;
+    public void save(List<E> member) throws PersistenceException;
+    public List<E> load() throws PersistenceException;
+
+}
